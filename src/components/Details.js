@@ -113,7 +113,7 @@ const AddButton = styled.button`
     color: white;
   }
 `
-// GROUP WATCH BUTTON
+// GROUP WATCH BUTTON STYLED
 
 const GroupWatchButton = styled(AddButton)`
   background: rgb(0, 0, 0);
