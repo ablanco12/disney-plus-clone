@@ -1,10 +1,67 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { findRenderedComponentWithType } from 'react-dom/test-utils'
 import styled from 'styled-components'
+import { auth, provider } from '../firebase'
+import { useHistory, userHistory } from 'react-router-dom'
+import {
+    selectUserName,
+    selectUserPhoto,
+    setUserLogin,
+    setSignOut
+} from '../features/user/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 function Header() {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const userName = useSelector(selectUserName);
+    const userPhoto = useSelector(selectUserPhoto);
+    
+    useEffect(()=> {
+        auth.onAuthStateChanged(async (user) => {
+            if(user){
+                dispatch(setUserLogin({
+                    name: user.displayName,
+                    email: user.email,
+                    photo: user.photoURL
+                }))  
+                history.push('/')
+            }
+        })
+    }, [])
+    const signIn = () => {
+        auth.signInWithPopup(provider)
+        .then((result)=>{
+            let user = result.user
+            dispatch(setUserLogin({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL
+            }))
+            history.push('/')
+        })
+    }
+
+    const signOut = () => {
+        auth.signOut()
+        .then(()=>{
+            dispatch(setSignOut())
+            history.push('./login')
+        }) 
+    }
+
+
   return (
     <Nav>
         <Logo src="/images/logo.svg" />
+        { !userName ? (
+
+            <LoginContainer>
+                <Login onClick={signIn}>
+                    Login
+                </Login>
+            </LoginContainer> ) :
+        <>
         <NavMenu>
             <a>
                 <img src="/images/home-icon.svg" alt="" />
@@ -31,7 +88,9 @@ function Header() {
                 <span>SERIES</span>
             </a>
         </NavMenu>
-        <UserImg src="https://scontent-hou1-1.xx.fbcdn.net/v/t1.18169-9/14724370_10211247270806007_120759510992306429_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=174925&_nc_ohc=jP2eaFq6F5cAX-azeL5&_nc_ht=scontent-hou1-1.xx&oh=00_AT-DHCwUhr7VdO9TC8bbe1u3f_9hs4iFNM5cAN-0fzAubw&oe=62CFE3B2"/>
+        <UserImg onClick={signOut} src="https://scontent-hou1-1.xx.fbcdn.net/v/t1.18169-9/14724370_10211247270806007_120759510992306429_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=174925&_nc_ohc=jP2eaFq6F5cAX-azeL5&_nc_ht=scontent-hou1-1.xx&oh=00_AT-DHCwUhr7VdO9TC8bbe1u3f_9hs4iFNM5cAN-0fzAubw&oe=62CFE3B2"/>
+        </>
+        }
     </Nav>
   )
 }
@@ -100,4 +159,29 @@ const UserImg = styled.img`
     height: 48px;
     border-radius: 50%;
     cursor: pointer;
+`
+
+const Login = styled.div`
+    border: 1px solid #f9f9f9;
+    padding: 8px 10px;
+    border-radius: 4px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f9f9f9;
+        color: #000;
+        border-color: transparent;
+    }
+
+`
+
+const LoginContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+
 `
