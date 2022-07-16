@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+!/node_modules/source-map-loader/dist/cjs.js
 /.pnp
 .pnp.js
 
