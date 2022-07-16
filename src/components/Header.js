@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { findRenderedComponentWithType } from 'react-dom/test-utils'
+// import { findRenderedComponentWithType } from 'react-dom/test-utils'
 import styled from 'styled-components'
 import { auth, provider } from '../firebase'
-import { useHistory, userHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {
     selectUserName,
     selectUserPhoto,
@@ -28,7 +28,8 @@ function Header() {
                 history.push('/')
             }
         })
-    }, [])
+    })
+
     const signIn = () => {
         auth.signInWithPopup(provider)
         .then((result)=>{
@@ -88,7 +89,7 @@ function Header() {
                 <span>SERIES</span>
             </a>
         </NavMenu>
-        <UserImg onClick={signOut} src="https://scontent-hou1-1.xx.fbcdn.net/v/t1.18169-9/14724370_10211247270806007_120759510992306429_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=174925&_nc_ohc=jP2eaFq6F5cAX-azeL5&_nc_ht=scontent-hou1-1.xx&oh=00_AT-DHCwUhr7VdO9TC8bbe1u3f_9hs4iFNM5cAN-0fzAubw&oe=62CFE3B2"/>
+        <UserImg onClick={signOut} src={userPhoto} />
         </>
         }
     </Nav>
