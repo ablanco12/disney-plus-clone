@@ -1,5 +1,6 @@
 import firebase from "firebase";
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyDOh3rp0RDV15rfKM0_kI-p8TscDz16ev8",
     authDomain: "movies-fa407.firebaseapp.com",
