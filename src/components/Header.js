@@ -47,7 +47,7 @@ function Header() {
         auth.signOut()
         .then(()=>{
             dispatch(setSignOut())
-            history.push('./login')
+            history.push('/login')
         }) 
     }
 
